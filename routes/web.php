@@ -31,10 +31,13 @@ Route::group($groupData, function () {
     Route::resource('categories', CategoryController::class)
         ->only($methods)
         ->names('blog.admin.categories');
+
+    //BlogPost
+    route::resource('posts', Blog\Admin\PostController::class)
+        ->except(['show'])
+        ->names('blog.admin.posts');
 });
-
-
-
+//<
 
 
 

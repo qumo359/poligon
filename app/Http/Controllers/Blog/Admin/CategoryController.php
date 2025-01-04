@@ -26,14 +26,12 @@ class CategoryController extends BaseController
      */
     private $blogCategoryRepository;
 
-
     public function __construct()
     {
         parent::__construct();
 
         $this->blogCategoryRepository = app(BlogCategoryRepository::class);
     }
-
 
     /**
      * Display a paginated listing of the blog categories.
@@ -85,6 +83,7 @@ class CategoryController extends BaseController
      * Show the form for editing the specified resource.
      *
      * @param int $id
+     *
      * @return Factory|View|Application|\Illuminate\View\View
      */
     public function edit($id, BlogCategoryRepository $categoryRepository)
@@ -120,6 +119,7 @@ class CategoryController extends BaseController
         }
 
         $data = $request->all();
+
         if (empty($data['slug'])) {
             $data['slug'] = Str::slug($data['title']);
         }
