@@ -41,15 +41,27 @@ class BlogPostRepository extends CoreRepository
             ->startConditions()
             ->select($columns)
             ->orderBy('id', 'desc')
-            //TODO:почитать о lazy load
-            //->with('category', 'user')
-            ->with(['category' => function ($query) {
-                $query->select(['id', 'title']);
-            },
-                //'user:id,name'
-            ])
+            ->with('category', 'user')
+//            ->with(['category' => function ($query) {
+//                $query->select(['id', 'title']);
+//            },
+//                'user:id,name'
+//            ])
             ->paginate(25);
 
         return $result;
     }
+
+    /**
+     * Получить модель для редактирования в админке.
+     *
+     * @param int $id
+     *
+     * @return Model
+     */
+    public function getEdit($id)
+    {
+        return $this->startConditions()->find($id);
+    }
+
 }

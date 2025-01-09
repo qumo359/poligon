@@ -47,7 +47,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            {{ $paginator->links() }}
+                            {{ $paginator->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>
