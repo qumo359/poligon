@@ -93,10 +93,14 @@ class PostController extends BaseController
 
     /**
      * Update the specified resource in storage.
+     *
+     * @param int $id
+     *
+     * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        dd(__METHOD__, $request->all(), $id);
     }
 
     /**
@@ -104,6 +108,6 @@ class PostController extends BaseController
      */
     public function destroy(string $id)
     {
-        //
+        dd(__METHOD__, $id);
     }
 }

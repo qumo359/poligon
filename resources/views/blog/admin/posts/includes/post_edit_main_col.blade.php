@@ -1,6 +1,7 @@
 @php
     /** @var \App\Models\BlogPost $item */
 @endphp
+
 <div class="row justify-content-center">
     <div class="col-md-12">
         <div class="card">
@@ -19,7 +20,7 @@
                         <a class="nav-link active" data-toggle="tab" href="#maindata" role="tab">Основные данные</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="tab" href="#adddata" role="tab">Доп. данные</a>
+                        <a class="nav-link" data-toggle="tab" href="#adddata" role="tab">Доп данные</a>
                     </li>
                 </ul>
                 <br>
@@ -48,12 +49,12 @@
                             <select name="category_id"
                                     id="category_id"
                                     class="form-control"
-                                    placeholder="Выберите категорию:"
+                                    placeholder="Выберите категорию"
                                     required>
                                 @foreach($categoryList as $categoryOption)
                                     <option value="{{ $categoryOption->id }}"
                                             @if($categoryOption->id == $item->category_id) selected @endif>
-                                        {{ $categoryOption->title }}
+                                        {{ $categoryOption->id_title }}
                                     </option>
                                 @endforeach
                             </select>
@@ -83,7 +84,11 @@
                                    type="checkbox"
                                    class="form-check-input"
                                    value="{{ $item->is_published }}"
-
+                                   @if($item->is_published)
+                                       checked="checked"
+                                @endif
+                            >
+                            <label class="form-check-label" for="is_published">Опубликовано</label>
                         </div>
                     </div>
                 </div>
