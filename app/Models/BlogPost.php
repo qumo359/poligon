@@ -6,10 +6,36 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @class  BlogPost
+ *
+ * @package App\Models
+ *
+ * @property \App\Models\BlogCategory $category
+ * @property \App\Models\User $user
+ * @property string $title
+ * @property string $slug
+ * @property string $content_html
+ * @property string $content_raw
+ * @property string $excerpt
+ * @property string $published_at
+ * @property boolean $is_published
+ */
 class BlogPost extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
+    protected $fillable = [
+        'category_id',
+        'user_id',
+        'title',
+        'slug',
+        'content_raw',
+        'excerpt',
+        'published_at',
+        'is_published',
+    ];
 
     /**
      * Категория статьи
