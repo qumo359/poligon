@@ -102,8 +102,8 @@ class CategoryController extends BaseController
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
+     * @param \App\Http\Requests\BlogCategoryUpdateRequest $request
+     * @param int                                          $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -119,10 +119,10 @@ class CategoryController extends BaseController
         }
 
         $data = $request->all();
-
-        if (empty($data['slug'])) {
-            $data['slug'] = Str::slug($data['title']);
-        }
+//        Ушло в обсервер
+//        if (empty($data['slug'])) {
+//            $data['slug'] = Str::slug($data['title']);
+//        }
 
         $result = $item->update($data);
 
