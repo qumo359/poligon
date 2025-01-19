@@ -68,6 +68,33 @@ class BlogPostObserver
     }
 
     /**
+     * Установка значения полю content_html относительно поля content_raw.
+     *
+     * @param \App\Models\BlogPost $blogPost
+     *
+     * @return void
+     */
+    protected function setHtml(BlogPost $blogPost)
+    {
+        if ($blogPost->isDirty('content_raw')) {
+            //Todo: markdown->html
+            $blogPost->content_html = $blogPost->content_raw;
+        }
+    }
+
+    /**
+     * Если не указан user_id, то устанавливаем пользователья по-умолчанию
+     *
+     * @param \App\Models\BlogPost $blogPost
+     *
+     * @return void
+     */
+    protected function setUser(BlogPost $blogPost)
+    {
+        $blogPost->user_id = auth()->id() ?? BlogPost::UNKNOWN_USER;
+    }
+
+    /**
      * Handle the BlogPost "created" event.
      *
      * @param \App\Models\BlogPost $blogPost

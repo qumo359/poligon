@@ -9,7 +9,7 @@
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.6",
-        "twbs/bootstrap": "4.0.0"
+        "twbs/bootstrap": "5.0.0"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",

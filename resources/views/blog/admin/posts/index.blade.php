@@ -24,7 +24,7 @@
                                 @php
                                     /**  @var \App\Models\BlogPost $post */
                                 @endphp
-                                <tr @if(!$post->is_published) style="background-color: #ccc;" @endif>
+                                <tr @if(!$post->is_published) style="background-color: darkgrey" @endif>
                                     <td>{{ $post->id }}</td>
                                     <td>{{ $post->user->name }}</td>
                                     <td>{{ $post->category->title }}</td>

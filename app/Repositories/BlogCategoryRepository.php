@@ -20,7 +20,7 @@ class BlogCategoryRepository extends CoreRepository
     /**
      * Получить модель для редактирования в админке.
      *
-     * @param int @id
+     * @param int $id
      *
      * @return Model
      */
