@@ -25,19 +25,6 @@ class BlogPostObserver
     }
 
     /**
-     * Обработка ПЕРЕД обновлением записи
-     *
-     * @param \App\Models\BlogPost $blogPost
-     *
-     * @return void
-     */
-    public function updating(BlogPost $blogPost): void
-    {
-        $this->setPublishedAt($blogPost);
-
-    }
-
-    /**
      * Если дата публикации не установлена и приходит установка флага - Опубликовано,
      * то устанавливаем дату публикации на текущую.
      *
@@ -95,6 +82,19 @@ class BlogPostObserver
     }
 
     /**
+     * Обработка ПЕРЕД обновлением записи
+     *
+     * @param \App\Models\BlogPost $blogPost
+     *
+     * @return void
+     */
+    public function updating(BlogPost $blogPost): void
+    {
+        $this->setPublishedAt($blogPost);
+
+    }
+
+    /**
      * Handle the BlogPost "created" event.
      *
      * @param \App\Models\BlogPost $blogPost
@@ -119,6 +119,18 @@ class BlogPostObserver
     }
 
     /**
+     *  Handle the BlogPost "deleting" event.
+     *
+     * @param \App\Models\BlogPost $blogPost
+     *
+     * @return void
+     */
+    public function deleting(BlogPost $blogPost): void
+    {
+//        dd(__METHOD__, $blogPost);
+    }
+
+    /**
      * Handle the BlogPost "deleted" event.
      *
      * @param \App\Models\BlogPost $blogPost
@@ -127,7 +139,7 @@ class BlogPostObserver
      */
     public function deleted(BlogPost $blogPost): void
     {
-        //
+//        dd(__METHOD__, $blogPost);
     }
 
 

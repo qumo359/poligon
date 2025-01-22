@@ -7,8 +7,6 @@ use App\Http\Requests\BlogPostUpdateRequest;
 use App\Models\BlogPost;
 use App\Repositories\BlogCategoryRepository;
 use App\Repositories\BlogPostRepository;
-use Illuminate\Http\Request;
-use function PHPUnit\Framework\isFalse;
 
 /**
  * Управление сстатьями блога
@@ -51,17 +49,6 @@ class PostController extends BaseController
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        $item = new BlogPost();
-        $categoryList = $this->blogCategoryRepository->getForComboBox();
-
-        return view('blog.admin.posts.edit', compact('item', 'categoryList'));
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(BlogPostCreateRequest $request)
@@ -76,6 +63,17 @@ class PostController extends BaseController
             return back()->withErrors(['msg' => 'Ощибка сохранения'])
                 ->withInput();
         }
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        $item = new BlogPost();
+        $categoryList = $this->blogCategoryRepository->getForComboBox();
+
+        return view('blog.admin.posts.edit', compact('item', 'categoryList'));
     }
 
     /**
@@ -147,11 +145,33 @@ class PostController extends BaseController
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+
+
+//    /**
+//     *  Remove the specified resource from storage.
+//     *
+//     * @param $id
+//     *
+//     * @return void
+//     */
+    public function destroy($id)
     {
-        dd(__METHOD__, $id);
+//        dd(__METHOD__, $id, request()->all());
+        /** Soft удаление: */
+        $result = BlogPost::destroy($id);
+
+//        /** Полное удаление: */
+//        $result = BlogPost::forceDestroy($id);
+
+//        /** Полное удаление без срабатывания обсерверов: */
+//        $result = BlogPost::find($id)->forceDelete();
+
+        if ($result) {
+            return redirect()
+                ->route('blog.admin.posts.index')
+                ->with(['success' => "Запись id: [$id] удалена."]);
+        } else {
+            return back()->withErrors(['msg' => 'Ошибка удаления.']);
+        }
     }
 }

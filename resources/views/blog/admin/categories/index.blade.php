@@ -28,7 +28,7 @@
                                         </a>
                                     </td>
                                     <td>
-                                    <td @if(in_array($item->parent_id, [0, 1])) style="color:#787575" @endif>
+                                    <td @if(in_array($item->parent_id, [0, 1])) style="color: grey" @endif>
                                     {{ $item->parentTitle }}
 
                                 </tr>

@@ -4,6 +4,9 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-12">
+
+                @include('blog.admin.posts.includes.result_messages')
+
                 <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
                     <a class="btn btn-primary" href="{{ route('blog.admin.posts.create') }}">Написать</a>
                 </nav>
@@ -47,7 +50,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            {{ $paginator->links('pagination::bootstrap-4') }}
+                            {{ $paginator->links('pagination::bootstrap-5') }}
                         </div>
                     </div>
                 </div>

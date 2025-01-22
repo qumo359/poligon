@@ -25,7 +25,8 @@ class BlogCategory extends Model
     /**
      * The attributes that are mass assignable.
      *
-     * @var array<int, string>
+     * @var string[]
+     *
      */
     protected $fillable
         = [
@@ -62,17 +63,17 @@ class BlogCategory extends Model
         return $title;
     }
 
-    /**
-     * Пример аксессора
-     *
-     * @param string $valueFromObject
-     *
-     * @return array|false|string|string[]|null
-     */
-    public function getTitleAttribute($valueFromObject)
-    {
-        return mb_strtoupper($valueFromObject);
-    }
+//    /**
+//     * Пример аксессора
+//     *
+//     * @param string $valueFromObject
+//     *
+//     * @return array|false|string|string[]|null
+//     */
+//    public function getTitleAttribute($valueFromObject)
+//    {
+//        return mb_strtoupper($valueFromObject);
+//    }
 
     /**
      * Пример мутатора
@@ -83,7 +84,7 @@ class BlogCategory extends Model
      */
     public function setTitleAttribute($incomingValue)
     {
-        $this->attributes['title'] = mb_strtoupper($incomingValue);
+        $this->attributes['title'] = mb_strtolower($incomingValue);
     }
 
     /**
