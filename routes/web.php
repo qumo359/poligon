@@ -19,12 +19,12 @@ Route::group(['prefix' => 'blog'], function () {
     Route::resource('posts', PostController::class)->names('blog.posts');
 });
 
-
 //>Админка блога
 $groupData = [
  //   'namespace' => 'Blog\Admin',
     'prefix' => 'admin/blog',
 ];
+
 Route::group($groupData, function () {
     //BlogCategory
     $methods = ['index', 'create', 'store', 'edit', 'update'];
@@ -37,6 +37,10 @@ Route::group($groupData, function () {
         ->except(['show'])
         ->names('blog.admin.posts');
 });
+
+Route::get('/admin/blog/posts/{post}/restore', [Blog\Admin\PostController::class, 'restore'])
+    ->name('blog.admin.posts.restore');
+
 //<
 
 

@@ -140,6 +140,7 @@ class BlogPostObserver
     public function deleted(BlogPost $blogPost): void
     {
 //        dd(__METHOD__, $blogPost);
+        route('blog.admin.posts.index', $blogPost->id);
     }
 
 

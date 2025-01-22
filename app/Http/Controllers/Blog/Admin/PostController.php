@@ -145,18 +145,15 @@ class PostController extends BaseController
         }
     }
 
-
-
-//    /**
-//     *  Remove the specified resource from storage.
-//     *
-//     * @param $id
-//     *
-//     * @return void
-//     */
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function destroy($id)
     {
-//        dd(__METHOD__, $id, request()->all());
         /** Soft удаление: */
         $result = BlogPost::destroy($id);
 
@@ -169,9 +166,29 @@ class PostController extends BaseController
         if ($result) {
             return redirect()
                 ->route('blog.admin.posts.index')
-                ->with(['success' => "Запись id: [$id] удалена."]);
+                ->with(['deleted_id' => $id, 'success' => "Запись с ID {$id} успешно удалена."]);
         } else {
             return back()->withErrors(['msg' => 'Ошибка удаления.']);
+        }
+    }
+
+    /**
+     *  Restore the specified resource from trash.
+     *
+     * @param $id
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function restore($id)
+    {
+        $post = BlogPost::onlyTrashed()->find($id);
+        $post->restore();
+
+        if (empty($post)) {
+            return back()->withErrors(['msg' => 'Ошибка Восстановления.']);
+        } else {
+            return redirect()->route('blog.admin.posts.edit', $post->id)
+                ->with(['success' => "Запись id: [$id] Восстановлена."]);
         }
     }
 }

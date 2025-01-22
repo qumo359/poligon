@@ -9,6 +9,10 @@
 
                 <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
                     <a class="btn btn-primary" href="{{ route('blog.admin.posts.create') }}">Написать</a>
+                    @if(session('deleted_id'))
+                        <a class="btn btn-danger" href="{{ route('blog.admin.posts.restore', session('deleted_id')) }}">Отменить
+                            удаление</a>
+                    @endif
                 </nav>
                 <div class="card">
                     <div class="card-body">
@@ -24,9 +28,9 @@
                             </thead>
                             <tbody>
                             @foreach($paginator as $post)
-                                @php
-                                    /**  @var \App\Models\BlogPost $post */
-                                @endphp
+                                {{--                                @php--}}
+                                {{--                                    /**  @var \App\Models\BlogPost $post */--}}
+                                {{--                                @endphp--}}
                                 <tr @if(!$post->is_published) style="background-color: darkgrey" @endif>
                                     <td>{{ $post->id }}</td>
                                     <td>{{ $post->user->name }}</td>
