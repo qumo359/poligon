@@ -63,6 +63,30 @@ class BlogCategory extends Model
     }
 
     /**
+     * Пример аксессора
+     *
+     * @param string $valueFromObject
+     *
+     * @return array|false|string|string[]|null
+     */
+    public function getTitleAttribute($valueFromObject)
+    {
+        return mb_strtoupper($valueFromObject);
+    }
+
+    /**
+     * Пример мутатора
+     *
+     * @param $incomingValue
+     *
+     * @return void
+     */
+    public function setTitleAttribute($incomingValue)
+    {
+        $this->attributes['title'] = mb_strtoupper($incomingValue);
+    }
+
+    /**
      * Являеться ли текущий объект корневым
      *
      * @return bool
