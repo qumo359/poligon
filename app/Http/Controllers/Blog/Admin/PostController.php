@@ -154,7 +154,7 @@ class PostController extends BaseController
      */
     public function destroy($id)
     {
-        /** Soft удаление: */
+        /** Soft delete: */
         $result = BlogPost::destroy($id);
 
 //        /** Полное удаление: */
