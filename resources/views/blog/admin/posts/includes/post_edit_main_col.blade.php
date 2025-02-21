@@ -42,6 +42,24 @@
                                       class="form-control"
                                       rows="20">{{ old('content_raw', $item->content_raw) }}</textarea>
                         </div>
+
+                        {{-- ** START: Added Image Upload Field ** --}}
+                        <div class="form-group pt-2">
+
+                            <img src="/storage/test/{{$item->post_image}}">
+                            <label for="post_image">Изображение поста</label>
+                            <input type="file" name="post_image" id="post_image" class="form-control-file">
+                            @if($item->post_image)
+                                <div class="mt-2">
+                                    <img src="{{ asset('storage/' . $item->post_image) }}" alt="Текущее изображение" style="max-width: 200px;">
+                                </div>
+                            @endif
+                            @error('post_image')
+                            <div class="invalid-feedback d-block">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        {{-- ** END: Added Image Upload Field ** --}}
+
                     </div>
                     <div class="tab-pane" id="adddata" role="tabpanel">
                         <div class="form-group">

@@ -4,12 +4,23 @@
     @php
         /** @var \App\Models\BlogPost $item */
     @endphp
+
+
+{{--    {{$item->id}}--}}
+{{--    <form method="POST" action="{{ route('blog.update', $item->id) }}" enctype="multipart/form-data">--}}
+{{--        @csrf--}}
+{{--        <input type="text" name="test">--}}
+{{--        <input type="submit">--}}
+{{--    </form>--}}
+    admin/blog/posts
+
     <div class="container">
 
         @include('blog.admin.posts.includes.result_messages')
 
         @if($item->exists)
-            <form method="POST" action="{{ route('blog.admin.posts.update', $item->id) }}">
+            <form method="POST" action="{{ route('blog.update', $item->id) }}" enctype="multipart/form-data">
+
                 @method('PATCH')
                 @else
                     <form method="POST" action="{{ route('blog.admin.posts.store') }}">

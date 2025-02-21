@@ -36,6 +36,8 @@ class BlogPost extends Model
         'excerpt',
         'published_at',
         'is_published',
+        'path',
+        'post_image'
     ];
 
     /**

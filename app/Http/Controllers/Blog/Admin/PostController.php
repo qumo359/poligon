@@ -9,6 +9,10 @@ use App\Jobs\BlogPostAfterDeleteJob;
 use App\Models\BlogPost;
 use App\Repositories\BlogCategoryRepository;
 use App\Repositories\BlogPostRepository;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
+use Illuminate\Http\Request;
 
 /**
  * Управление сстатьями блога
@@ -50,12 +54,36 @@ class PostController extends BaseController
         return view('blog.admin.posts.index', compact('paginator'));
     }
 
+    public function storeTest(Request $request)
+    {
+        dd(1);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(BlogPostCreateRequest $request)
     {
+        dd(1);
+
         $data = $request->input();
+
+
+        // **Загрузка и обработка изображения (если есть)**
+        if ($request->hasFile('post_image')) {
+            $image = $request->file('post_image');
+            $filename = Str::random(20) . '.' . $image->getClientOriginalExtension();
+
+            $imageInstance = Image::make($image); // Intervention Image
+            $imageInstance->resize(800, null, function ($constraint) { // Изменение размера (опционально)
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            $path = Storage::disk('public')->put('blog_post_images/' . $filename, $imageInstance->stream());
+            $data['post_image'] = $path; // Сохраняем путь к изображению в данных поста
+        }
+
         $item = (new BlogPost())->create($data);
 
         if ($item) {
@@ -84,7 +112,7 @@ class PostController extends BaseController
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
         //
     }
@@ -120,6 +148,7 @@ class PostController extends BaseController
      */
     public function update(BlogPostUpdateRequest $request, $id)
     {
+
         $item = $this->blogPostRepository->getEdit($id);
 
         if (empty($item)) {
@@ -137,12 +166,42 @@ class PostController extends BaseController
 //            $data['published_at'] = \Carbon\Carbon::now();
 //        }
 
+        // **Обновление изображения (если загружено новое)**
+        if ($request->hasFile('post_image')) {
+
+            // Удаление старого изображения (если есть) - Опционально, зависит от логики
+            if ($item->post_image) {
+                Storage::disk('public')->delete($item->post_image);
+            }
+
+            $image = $request->file('post_image');
+            $filename = Str::random(20) . '.' . $image->getClientOriginalExtension();
+
+            $imageInstance = Image::make($image);
+            $imageInstance->resize(1600, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+            Storage::disk('public')->put('test/' . $filename, $imageInstance->stream());
+
+            $imagePreviewInstance = Image::make($image);
+            $imagePreviewInstance->resize(800, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+            Storage::disk('public')->put('test/preview/' . $filename, $imagePreviewInstance->stream());
+
+            $data['post_image'] = $filename;
+
+        }
+
         $result = $item->update($data);
 
         if ($result) {
             return redirect()
                 ->route('blog.admin.posts.edit', $item->id)
-                ->with(['succeess' => 'Успешно сохранено']);
+                ->with(['success' => 'Успешно сохранено']);
         } else {
             return back()
                 ->withErrors(['msg' => 'Ошибка сохранения'])
@@ -159,6 +218,12 @@ class PostController extends BaseController
      */
     public function destroy($id)
     {
+        $item = $this->blogPostRepository->getEdit($id); // Получаем запись перед удалением
+
+        if (empty($item)) {
+            return back()->withErrors(['msg' => 'Запись не найдена для удаления.']);
+        }
+
         /** Soft delete: */
         $result = BlogPost::destroy($id);
 
@@ -169,6 +234,10 @@ class PostController extends BaseController
 //        $result = BlogPost::find($id)->forceDelete();
 
         if ($result) {
+            // **Удаление изображения после удаления поста (если есть) - Опционально, зависит от логики**
+            if ($item->post_image) {
+                Storage::disk('public')->delete($item->post_image);
+            }
 
             BlogPostAfterDeleteJob::dispatch($id);
 

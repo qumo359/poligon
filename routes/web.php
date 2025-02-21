@@ -3,16 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Blog\Admin\CategoryController;
+// use App\Http\Controllers\Blog\Admin\ImageUploadController;
 use App\Http\Controllers\Blog\PostController;
-use App\Http\Controllers\RestTestController;
 use Auth;
 use Illuminate\Support\Facades\Route;
 
+Route::post('/admin/blog/posts/{post}', [Blog\Admin\PostController::class, 'storeTest'])->name('blog.update');
 Route::get('/', function () {
     return view('welcome');
 });
 Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::post('/upload-image', [ImageUploadController::class, 'upload'])->name('image-upload');
 
 Route::group(['prefix' => 'digging_deeper'], function () {
     Route::get('collections', [DiggingDeeperController::class, 'collections'])
@@ -25,7 +28,7 @@ Route::group(['prefix' => 'blog'], function () {
 
 //>Админка блога
 $groupData = [
- //   'namespace' => 'Blog\Admin',
+    //   'namespace' => 'Blog\Admin',
     'prefix' => 'admin/blog',
 ];
 
@@ -46,7 +49,6 @@ Route::get('/admin/blog/posts/{post}/restore', [Blog\Admin\PostController::class
     ->name('blog.admin.posts.restore');
 
 //<
-
 
 
 //Route::resource('rest', RestTestController::class)->names('restTest');

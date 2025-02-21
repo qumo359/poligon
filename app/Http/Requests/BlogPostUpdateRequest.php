@@ -29,6 +29,8 @@ class BlogPostUpdateRequest extends FormRequest
             'excerpt' => 'max:500',
             'content_raw' => 'required|string|min:5|max:10000',
             'category_id' => 'required|integer|exists:blog_categories,id',
+            'post_image'    => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // **Правила валидации для изображения**
+
         ];
     }
 
