@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @class  BlogPost
@@ -60,5 +61,14 @@ class BlogPost extends Model
     {
         //Статья принадлежит пользователю
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Связь с моделью Comment (один ко многим - один пост имеет много комментариев)
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class, 'post_id');
     }
 }

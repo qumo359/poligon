@@ -37,21 +37,30 @@
                         </div>
                         <div class="form-group">
                             <label for="content_raw">Статья</label>
-                            <textarea name="content_raw"
-                                      id="content_raw"
-                                      class="form-control"
-                                      rows="20">{{ old('content_raw', $item->content_raw) }}</textarea>
+
+
+                            <textarea id="editor" name="content_raw">
+                                 {{ old('content_raw', $item->content_raw) }}
+                            </textarea>
+
+{{--                            <textarea name="content_raw"--}}
+{{--                                      id="content_raw"--}}
+{{--                                      class="form-control"--}}
+{{--                                      rows="20">{{ old('content_raw', $item->content_raw) }}</textarea>--}}
                         </div>
 
                         {{-- ** START: Added Image Upload Field ** --}}
                         <div class="form-group pt-2">
 
-                            <img src="/storage/test/{{$item->post_image}}">
+                            @if($item->post_image)
+                            <img src="/storage/test/{{$item->post_image}}" style="max-width: 200px;">
+                            @endif
+
                             <label for="post_image">Изображение поста</label>
                             <input type="file" name="post_image" id="post_image" class="form-control-file">
                             @if($item->post_image)
                                 <div class="mt-2">
-                                    <img src="{{ asset('storage/' . $item->post_image) }}" alt="Текущее изображение" style="max-width: 200px;">
+                                    <img  src="{{ asset('storage/' . $item->post_image) }}" alt="Текущее изображение" style="max-width: 200px;">
                                 </div>
                             @endif
                             @error('post_image')
@@ -114,3 +123,31 @@
         </div>
     </div>
 </div>
+
+
+@push('scripts')
+    <script>
+        const {
+            ClassicEditor,
+            Essentials,
+            Bold,
+            Italic,
+            Font,
+            Paragraph
+        } = CKEDITOR;
+        const { FormatPainter } = CKEDITOR_PREMIUM_FEATURES;
+
+        ClassicEditor
+            .create( document.querySelector( '#editor' ), {
+                licenseKey: 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3NDE2NTExOTksImp0aSI6IjczNzExYjYxLTVhZGItNGY1Zi04MWI2LTdlYzQyNTI0MzQ2YSIsInVzYWdlRW5kcG9pbnQiOiJodHRwczovL3Byb3h5LWV2ZW50LmNrZWRpdG9yLmNvbSIsImRpc3RyaWJ1dGlvbkNoYW5uZWwiOlsiY2xvdWQiLCJkcnVwYWwiLCJzaCJdLCJ3aGl0ZUxhYmVsIjp0cnVlLCJsaWNlbnNlVHlwZSI6InRyaWFsIiwiZmVhdHVyZXMiOlsiKiJdLCJ2YyI6ImM0Mjg2N2M5In0.8ZafITx_lpqbj-g-hniggoivYqqxmXIJq3Gh26SQVAJ3tEJR2lgSchdT76Mmpy7gghP_ngL2L9wv1-4fNheckQ',
+                plugins: [ Essentials, Bold, Italic, Font, Paragraph, FormatPainter ],
+                toolbar: [
+                    'undo', 'redo', '|', 'bold', 'italic', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', '|',
+                    'formatPainter'
+                ]
+            } )
+            .then( /* ... */ )
+            .catch( /* ... */ );
+    </script>
+@endpush

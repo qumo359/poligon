@@ -13,9 +13,8 @@ class PostController extends BaseController
      */
     public function index()
     {
-        $items = BlogPost::all();
-
-        //dd($items->first());
+        // Получаем все посты и жадно загружаем связь 'category'
+        $items = BlogPost::with('category')->get();
 
         return view('blog.posts.index', compact('items'));
     }
@@ -43,10 +42,12 @@ class PostController extends BaseController
     {
         $item = BlogPost::find($id);
 
+        $comments = $item->comments()->with('user')->latest()->get(); // получение всех комментариев поста
+
         if (empty($item)) {
             abort(404);
         } else {
-            return view('blog.posts.show', compact('item'));
+            return view('blog.posts.show', compact('item', 'comments'));
         }
     }
 

@@ -16,29 +16,30 @@
             flex: 1;
         }
     </style>
+
     <div class="container">
-        <div class="row row-eq-height"> {{-- Добавляем класс row-eq-height к строке --}}
-            @foreach($items as $item)
+        <div class="row row-eq-height">
+            @php
+                /** @var \Hamcrest\Collection\ $items */
+               // Группируем по имени категории через связь 'category.name'
+               $groupedItems = $items->groupBy('category.name');
+            @endphp
+
+            @foreach($groupedItems as $categoryName => $categoryItems)
                 <div class="col-md-4">
-                    <div class="card mb-3">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ $item->title }}</h5>
-                            <p class="card-text">{{ $item->excerpt }}</p>
-                            <p class="card-text"><small class="text-body-secondary">Создано: {{ $item->created_at }}</small></p>
-                            <a href="{{ route('blog.posts.show', $item->id) }}" class="btn btn-primary">Читать далее</a>
+                    <h3>{{ $categoryName ?? 'Без категории' }}</h3> {{-- Выводим имя категории, или "Без категории", если имя отсутствует --}}
+                    @foreach($categoryItems as $item)
+                        <div class="card mb-3">
+                            <div class="card-body"> {{ $item->id }}
+                                <h5 class="card-title">{{ $item->title }}</h5>
+                                <p class="card-text">{{ $item->excerpt }}</p>
+                                <p class="card-text"><small class="text-body-secondary">Создано: {{ $item->created_at }}</small></p>
+                                <a href="{{ route('blog.posts.show', $item->id) }}" class="btn btn-primary">Читать далее</a>
+                            </div>
                         </div>
-                    </div>
+                    @endforeach
                 </div>
             @endforeach
         </div>
     </div>
-{{--<table>--}}
-{{--    @foreach($items as $item)--}}
-{{--        <tr>--}}
-{{--            <td>{{ $item->id }}</td>--}}
-{{--            <td>{{ $item ->title }}</td>--}}
-{{--            <td>{{ $item ->created_at }}</td>--}}
-{{--        </tr>--}}
-{{--    @endforeach--}}
-{{--</table>--}}
 @endsection
