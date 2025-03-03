@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Blog;
 
 use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
+use App\Models\BlogCategory;
 use Illuminate\Http\Request;
 
 class PostController extends BaseController
@@ -14,9 +15,11 @@ class PostController extends BaseController
     public function index()
     {
         // Получаем все посты и жадно загружаем связь 'category'
-        $items = BlogPost::with('category')->get();
+        // $items = BlogPost::with('category')->get();
+        $categories = BlogCategory::withCount('posts')->get();
+        $items = BlogPost::paginate(10);
 
-        return view('blog.posts.index', compact('items'));
+        return view('blog.posts.index', compact('categories'),compact('items'));
     }
 
     /**

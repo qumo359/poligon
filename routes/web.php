@@ -15,7 +15,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Blog\BlogCategoryController; // Импортируйте контроллер
 
+Route::get('/categories/{category:slug}', [BlogCategoryController::class, 'show'])->name('blog.categories.show');
 
 Route::post('/admin/blog/posts/{post}', [Blog\Admin\PostController::class, 'storeTest'])->name('blog.update');
 

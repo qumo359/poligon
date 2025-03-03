@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -62,6 +63,13 @@ class BlogCategory extends Model
 
         return $title;
     }
+
+    public function posts(): HasMany
+    {
+        // Категория имеет много постов
+        return $this->hasMany(BlogPost::class, 'category_id'); // 'category_id' - внешний ключ в таблице blog_posts
+    }
+
 
 //    /**
 //     * Пример аксессора

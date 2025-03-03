@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('blog_posts', function (Blueprint $table) {
 //            $table->increments('id');
-           $table->id();
+            $table->id();
 
             $table->bigInteger('category_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
