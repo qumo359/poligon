@@ -12,14 +12,15 @@ class CommentController extends Controller
 {
     public function store(Request $request, BlogPost $post)
     {
+
         $request->validate([
-            'body' => 'required|string|max:500',
+            'comment' => 'required|string|max:500',
         ]);
 
         $comment = new Comment();
         $comment->post_id = $post->id;
         $comment->user_id = auth()->id();
-        $comment->body = strip_tags($request->body, '<p><a><ul><ol><li><b><strong><i><em><br><span><div>');
+        $comment->body = strip_tags($request->comment, '<p><a><ul><ol><li><b><strong><i><em><br><span><div>');
         $comment->save();
 
         if (Auth::check()) { // Если пользователь авторизован, связываем комментарий с пользователем

@@ -16,10 +16,11 @@ class PostController extends BaseController
     {
         // Получаем все посты и жадно загружаем связь 'category'
         // $items = BlogPost::with('category')->get();
+        $latestPosts = BlogPost::latest('created_at')->take(5)->get();
         $categories = BlogCategory::withCount('posts')->get();
         $items = BlogPost::paginate(10);
 
-        return view('blog.posts.index', compact('categories'),compact('items'));
+        return view('blog.posts.index', compact('categories', 'items', 'latestPosts'));
     }
 
     /**
@@ -44,6 +45,7 @@ class PostController extends BaseController
     public function show(string $id)
     {
         $item = BlogPost::find($id);
+        $categories = BlogCategory::withCount('posts')->get();
 
         $comments = $item->comments()->with('user')->latest()->get(); // получение всех комментариев поста
 
