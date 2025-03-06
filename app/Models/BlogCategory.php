@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -71,17 +72,17 @@ class BlogCategory extends Model
     }
 
 
-//    /**
-//     * Пример аксессора
-//     *
-//     * @param string $valueFromObject
-//     *
-//     * @return array|false|string|string[]|null
-//     */
-//    public function getTitleAttribute($valueFromObject)
-//    {
-//        return mb_strtoupper($valueFromObject);
-//    }
+    /**
+     * Пример аксессора
+     *
+     * @param string $valueFromObject
+     *
+     * @return array|false|string|string[]|null
+     */
+    public function getTitleAttribute($valueFromObject)
+    {
+        return mb_strtoupper($valueFromObject);
+    }
 
     /**
      * Пример мутатора
@@ -103,5 +104,16 @@ class BlogCategory extends Model
     public function isRoot()
     {
         return $this->id === BlogCategory::ROOT;
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute
+     */
+    protected function title() :Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => ucfirst($value),
+        );
     }
 }

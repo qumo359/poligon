@@ -15,9 +15,9 @@ class AdminCheck
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()->role !== 1) {
-            return redirect('/home');
-        }
+//        if ($request->user()->role !== 1) {
+//            return redirect('/home');
+//        }
 
         return $next($request);
     }

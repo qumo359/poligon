@@ -12,9 +12,8 @@
 {{--        <input type="text" name="test">--}}
 {{--        <input type="submit">--}}
 {{--    </form>--}}
-    admin/blog/posts
 
-    <div class="container">
+    <div class="container" id="admin-panel-content">
 
         @include('blog.admin.posts.includes.result_messages')
 

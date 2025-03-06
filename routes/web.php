@@ -17,7 +17,7 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Blog\BlogCategoryController; // Импортируйте контроллер
 
-Route::get('/categories/{category:slug}', [BlogCategoryController::class, 'show'])->name('blog.categories.show');
+Route::get('blog/categories/{category:slug}', [BlogCategoryController::class, 'show'])->name('blog.categories.show');
 
 Route::post('/admin/blog/posts/{post}', [Blog\Admin\PostController::class, 'storeTest'])->name('blog.update');
 
@@ -30,7 +30,7 @@ Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 
 // Выход из системы
-Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
+//Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
 
 // Сброс пароля (форма ввода email)
 Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
