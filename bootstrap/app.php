@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => App\Http\Middleware\AdminCheck::class
         ]);
     })
+
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

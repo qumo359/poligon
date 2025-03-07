@@ -59,20 +59,24 @@ class PostController extends BaseController
         dd(1);
     }
 
+    public function storeTest2(Request $request)
+    {
+        dd(1);
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(BlogPostCreateRequest $request)
     {
-        dd(1);
-
         $data = $request->input();
-
 
         // **Загрузка и обработка изображения (если есть)**
         if ($request->hasFile('post_image')) {
             $image = $request->file('post_image');
             $filename = Str::random(20) . '.' . $image->getClientOriginalExtension();
+            $filename2 = Str::random(20) . '.' . $image->getClientOriginalExtension();
+
 
             $imageInstance = Image::make($image); // Intervention Image
             $imageInstance->resize(800, null, function ($constraint) { // Изменение размера (опционально)
@@ -80,10 +84,20 @@ class PostController extends BaseController
                 $constraint->upsize();
             });
 
+            $imagePreview = Image::make($image);
+            $imagePreview->resize(80, null, function ($constraint) {
+                $constraint->aspectRatio();
+                $constraint->upsize();
+            });
+
+
+            $pathToPreview = Storage::disk('public')->put('test2/', $filename2, $imagePreview->stream());
+
+
             $path = Storage::disk('public')->put('blog_post_images/' . $filename, $imageInstance->stream());
             $data['post_image'] = $path; // Сохраняем путь к изображению в данных поста
+            $data['thumbnail_path'] = $pathToPreview;
         }
-
         $item = (new BlogPost())->create($data);
 
         if ($item) {
@@ -127,6 +141,7 @@ class PostController extends BaseController
      */
     public function edit($id)
     {
+
         $item = $this->blogPostRepository->getEdit($id);
         if (empty($item)) {
             abort(404);
@@ -177,23 +192,29 @@ class PostController extends BaseController
             $image = $request->file('post_image');
             $filename = Str::random(20) . '.' . $image->getClientOriginalExtension();
 
+
+
             $imageInstance = Image::make($image);
             $imageInstance->resize(1600, null, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
             });
-
             Storage::disk('public')->put('test/' . $filename, $imageInstance->stream());
+
+
+
 
             $imagePreviewInstance = Image::make($image);
             $imagePreviewInstance->resize(800, null, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
             });
-            Storage::disk('public')->put('test/preview/' . $filename, $imagePreviewInstance->stream());
+            $dd =  Storage::disk('public')->put('test/preview/' . $filename, $imagePreviewInstance->stream());
+
+
+
 
             $data['post_image'] = $filename;
-
         }
 
         $result = $item->update($data);

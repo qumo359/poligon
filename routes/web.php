@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Blog\Admin\CategoryController;
 // use App\Http\Controllers\Blog\Admin\ImageUploadController;
 use App\Http\Controllers\Blog\CommentController;
+use App\Http\Controllers\Blog\LikeController;
 use App\Http\Controllers\Blog\PostController;
 use App\Http\Middleware\AdminCheck;
 use Auth;
@@ -17,9 +18,13 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Blog\BlogCategoryController; // Импортируйте контроллер
 
+
 Route::get('blog/categories/{category:slug}', [BlogCategoryController::class, 'show'])->name('blog.categories.show');
 
 Route::post('/admin/blog/posts/{post}', [Blog\Admin\PostController::class, 'storeTest'])->name('blog.update');
+Route::post('/admin/blog/posts2222/{post}', [Blog\Admin\PostController::class, 'storeTest2'])->name('admins.blog.update');
+
+
 
 // Форма регистрации и обработка данных
 Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
@@ -40,8 +45,7 @@ Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkE
 Route::get('/password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
 Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
 
-Route::get('/', [Blog\PostController::class, 'index'])
-    ->name('blog.admin.posts.index');
+
 //Auth::routes();
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
@@ -56,38 +60,22 @@ Route::group(['prefix' => 'blog'], function () {
     Route::resource('posts', PostController::class)->names('blog.posts');
 });
 
-//>Админка блога
-$groupData = [
-    //   'namespace' => 'Blog\Admin',
-    'prefix' => 'admin/blog',
-];
-
-Route::group($groupData, function () {
-
-    Route::group(['middleware' => ['admin']], function () {
-        route::resource('posts', Blog\Admin\PostController::class)
-            ->except(['show'])
-            ->names('blog.admin.posts');
 
 
-        $methods = ['index', 'create', 'store', 'edit', 'update'];
-        Route::resource('categories', CategoryController::class)
-            ->only($methods)
-            ->names('blog.admin.categories');
 
 
-    });
-
-
-});
-
-Route::get('/admin/blog/posts/{post}/restore', [Blog\Admin\PostController::class, 'restore'])
-    ->name('blog.admin.posts.restore');
 
 // Маршрут для добавления комментария
 Route::post('/blog/posts{post}', [CommentController::class, 'store'])->name('blog.posts.comments.store');
+Route::get('/search', [PostController::class, 'search'])->name('blog.search');
 
 
+require __DIR__ . '/admin.php';
 //Route::resource('rest', RestTestController::class)->names('restTest');
 
+Route::post('/posts/{post}/like', [LikeController::class, 'like'])->name('blog.posts.like');
+Route::post('/posts/{post}/unlike', [LikeController::class, 'unlike'])->name('blog.posts.unlike');
 
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

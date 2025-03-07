@@ -56,4 +56,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Comment::class);
     }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function likes(): HasMany
+    {
+        return $this->hasMany(Like::class); // Пользователь имеет много лайков
+    }
 }

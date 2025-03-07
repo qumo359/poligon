@@ -31,6 +31,11 @@ class PostController extends BaseController
         //
     }
 
+    public function search(Request $request)
+    {
+        $posts = BlogPost::where('title', 'like', "%$request->title%")->orWhere('content_raw', 'like', "%$request->title%")->get();
+dd($posts);
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -46,14 +51,15 @@ class PostController extends BaseController
     {
         $item = BlogPost::find($id);
         $categories = BlogCategory::withCount('posts')->get();
+        $latestPosts = BlogPost::latest('created_at')->take(5)->get();
+        if(empty($item)) return abort(404);
 
-        $comments = $item->comments()->with('user')->latest()->get(); // получение всех комментариев поста
+        $comments = $item->comments()->with('user')->latest()->get();
 
-        if (empty($item)) {
-            abort(404);
-        } else {
-            return view('blog.posts.show', compact('item', 'comments'));
-        }
+        $prev = BlogPost::where('category_id', $item->category_id)->where('id', '<', $item->id)->first();
+        $next = BlogPost::where('category_id', $item->category_id)->where('id', '>', $item->id)->first();
+
+        return view('blog.posts.show', compact('item', 'comments', 'categories', 'latestPosts', 'prev', 'next'));
     }
 
     /**
@@ -69,7 +75,7 @@ class PostController extends BaseController
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->ip();
     }
 
     /**

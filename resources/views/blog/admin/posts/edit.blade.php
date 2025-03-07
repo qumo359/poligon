@@ -18,7 +18,7 @@
         @include('blog.admin.posts.includes.result_messages')
 
         @if($item->exists)
-            <form method="POST" action="{{ route('blog.update', $item->id) }}" enctype="multipart/form-data">
+             <form method="POST" action="{{ route('blog.update', $item->id) }}" enctype="multipart/form-data">
 
                 @method('PATCH')
                 @else
