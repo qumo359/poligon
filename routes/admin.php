@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Blog;
 
 use App\Http\Controllers\Blog\Admin\CategoryController;
 // use App\Http\Controllers\Blog\Admin\ImageUploadController;
@@ -22,32 +22,38 @@ $groupData = [
     //   'namespace' => 'Blog\Admin',
     'prefix' => 'admin/blog',
 ];
-
-Route::group($groupData, function () {
-
-    Route::group(['middleware' => ['admin']], function () {
-        route::resource('posts', Blog\Admin\PostController::class)
-            ->except(['show'])
-            ->names('blog.admin.posts');
-
-
-        $methods = ['index', 'create', 'store', 'edit', 'update'];
-        Route::resource('categories', CategoryController::class)
-            ->only($methods)
-            ->names('blog.admin.categories');
-
-
-    });
+Route::group(['prefix' => 'admin/blog', 'as' => 'admin.', 'middleware' => 'admin'], function () { // Группа маршрутов для админ-панели (с middleware admin)
+    Route::resource('categories', \App\Http\Controllers\Blog\Admin\CategoryController::class)->names('categories'); // Ресурсные маршруты для админских категорий
+    Route::resource('posts', \App\Http\Controllers\Blog\Admin\PostController::class)->names('posts'); // Ресурсные маршруты для админских постов
+    Route::post('/blog/posts/{post}', [PostController::class, 'storeTest'])->name('blog.update'); //  Вероятно, лишние маршруты, дублируют resource routes
+    Route::post('/blog/posts2222/{post}', [PostController::class, 'storeTest2'])->name('admins.blog.update'); //  Вероятно, лишние маршруты, дублируют resource routes
 });
 
-Route::get('/', [Blog\PostController::class, 'index'])
-    ->name('blog.admin.posts.index');
-
-Route::get('/admin/blog/posts/{post}/restore', [Blog\Admin\PostController::class, 'restore'])
-    ->name('blog.admin.posts.restore');
-
-
-Route::get('/asdasdasd', function () {
-    return 1111;
-})->name('admin.dashboard');
-
+//Route::group($groupData, function () {
+//
+//    Route::group(['middleware' => ['admin']], function () {
+//        route::resource('posts', Blog\Admin\PostController::class)
+//            ->except(['show'])
+//            ->names('blog.admin.posts');
+//
+//
+//        $methods = ['index', 'create', 'store', 'edit', 'update'];
+//        Route::resource('categories', CategoryController::class)
+//            ->only($methods)
+//            ->names('blog.admin.categories');
+//
+//
+//    });
+//});
+//
+//Route::get('/', [Blog\PostController::class, 'index'])
+//    ->name('blog.admin.posts.index');
+//
+//Route::get('/admin/blog/posts/{post}/restore', [Blog\Admin\PostController::class, 'restore'])
+//    ->name('blog.admin.posts.restore');
+//
+//
+//Route::get('/asdasdasd', function () {
+//    return 1111;
+//})->name('admin.dashboard');
+//

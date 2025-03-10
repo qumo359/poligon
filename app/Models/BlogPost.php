@@ -72,15 +72,15 @@ class BlogPost extends Model
         return $this->hasMany(Comment::class, 'post_id');
     }
 
-    public function likes(): HasMany // Измените на HasMany
+    public function likes(): HasMany
     {
         return $this->hasMany(Like::class); // Пост имеет много лайков
     }
 
-    public function isLikedByIp(string $ipAddress)
-    {
-        return $this->likes()->where('ip_address', $ipAddress)->exists();
-    }
+//    public function isLikedByIp(string $ipAddress)
+//    {
+//        return $this->likes()->where('ip_address', $ipAddress)->exists();
+//    }
 
     public function likeCount()
     {

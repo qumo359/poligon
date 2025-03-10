@@ -15,12 +15,16 @@ class CommentController extends Controller
 
         $request->validate([
             'comment' => 'required|string|max:500',
+            'parent_id' => 'nullable|integer|exists:comments,id',
+
         ]);
 
         $comment = new Comment();
         $comment->post_id = $post->id;
         $comment->user_id = auth()->id();
+        $comment->parent_id = $request->input('parent_id');
         $comment->body = strip_tags($request->comment, '<p><a><ul><ol><li><b><strong><i><em><br><span><div>');
+
         $comment->save();
 
         if (Auth::check()) { // Если пользователь авторизован, связываем комментарий с пользователем
@@ -29,6 +33,6 @@ class CommentController extends Controller
 
         $post->comments()->save($comment); // Связываем комментарий с постом и сохраняем
 
-        return back()->with('success', 'Комментарий успешно добавлен!'); // Возвращаемся назад на страницу поста
+        return back()->with('success', 'Комментарий добавлен!'); // Возвращаемся назад на страницу поста
     }
 }

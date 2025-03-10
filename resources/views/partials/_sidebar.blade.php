@@ -1,13 +1,14 @@
 <div class="blog_right_sidebar">
     <aside class="single_sidebar_widget search_widget">
-        <form action="#">
+        <form action="{{ route('blog.posts.search') }}">
             <div class="form-group">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Search Keyword"
+                    <input type="text" class="form-control" placeholder="Поиск..." name="query"
+                           value="{{ request('query') }}"
                            onfocus="this.placeholder = ''"
                            onblur="this.placeholder = 'Search Keyword'">
                     <div class="input-group-append">
-                        <button class="btn" type="button"><i class="ti-search"></i></button>
+                        <button class="btn" type="submit"><i class="fa fa-search"></i></button>
                     </div>
                 </div>
             </div>
@@ -34,9 +35,9 @@
         @foreach($latestPosts as $latestPost)
             <div class="media post_item">
                 @if($latestPost->post_image)
-                    <img src="{{$latestPost->post_image}}" alt="">
+                    <img src="{{$latestPost->post_image}}"  style="width: 70px; height: auto" alt="">
                 @else
-                    <img class="img-preview-container" src="/storage/test/imagenotfound.png"
+                    <img class="img-preview-container"  style="width: 70px; height: auto" src="/storage/test/imagenotfound.png"
                          alt="NOimage">
                 @endif
                 <div class="media-body">

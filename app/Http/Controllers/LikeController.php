@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Blog;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\BlogPost;
 use App\Models\Like;
 use Illuminate\Http\Request;
@@ -33,7 +32,7 @@ class LikeController extends Controller
         return back()->with('success', 'Лайк поставлен!');
     }
 
-    public function dislike(Request $request, BlogPost $blogPost){
+    public function unlike(Request $request, BlogPost $blogPost){
         $user = Auth::user();
 
         if (!$user) {
@@ -49,7 +48,7 @@ class LikeController extends Controller
             return back()->with('success', 'Лайк убран.');
         }
 
-        return back()->with('error', 'Лайк не найден.');
+        return back()->with('error', 'Лайк не найден.'); // Если лайк не найден (возможно, пользователь не лайкал пост)
     }
 
 }

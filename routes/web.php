@@ -1,81 +1,87 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use App\Http\Controllers\Blog\Admin\CategoryController;
-// use App\Http\Controllers\Blog\Admin\ImageUploadController;
-use App\Http\Controllers\Blog\CommentController;
-use App\Http\Controllers\Blog\LikeController;
-use App\Http\Controllers\Blog\PostController;
-use App\Http\Middleware\AdminCheck;
-use Auth;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Auth\LoginController;
-
-use App\Http\Controllers\Auth\RegisterController;
-use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\Blog\BlogCategoryController; // Импортируйте контроллер
+use App\Http\Controllers\Blog\Admin\CategoryController as AdminCategoryController; // Более явное имя для Admin CategoryController
+use App\Http\Controllers\Blog\Admin\PostController as AdminPostController; // Более явное имя для Admin PostController
+// use App\Http\Controllers\Blog\Admin\ImageUploadController; // Закомментировано, возможно не используется
+use App\Http\Controllers\Blog\BlogCategoryController;
+use App\Http\Controllers\Blog\CommentController;
+use App\Http\Controllers\Blog\PostController;
+use App\Http\Controllers\DiggingDeeperController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\LikeController;
+use \App\Http\Controllers\Blog\Admin;
 
+use Illuminate\Support\Facades\Route;
 
-Route::get('blog/categories/{category:slug}', [BlogCategoryController::class, 'show'])->name('blog.categories.show');
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
 
-Route::post('/admin/blog/posts/{post}', [Blog\Admin\PostController::class, 'storeTest'])->name('blog.update');
-Route::post('/admin/blog/posts2222/{post}', [Blog\Admin\PostController::class, 'storeTest2'])->name('admins.blog.update');
-
-
-
-// Форма регистрации и обработка данных
-Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
-Route::post('/register', [RegisterController::class, 'register']);
-
-// Форма входа и обработка данных
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [LoginController::class, 'login']);
-
-// Выход из системы
-//Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
-
-// Сброс пароля (форма ввода email)
-Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
-
-// Сброс пароля (форма ввода нового пароля)
-Route::get('/password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
-Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
-
-
-//Auth::routes();
-Route::get('/home', [HomeController::class, 'index'])->name('home');
-
-Route::post('/upload-image', [ImageUploadController::class, 'upload'])->name('image-upload');
-
-Route::group(['prefix' => 'digging_deeper'], function () {
-    Route::get('collections', [DiggingDeeperController::class, 'collections'])
-        ->name('digging_deeper.collections');
+Route::get('/', function () {
+    return view('welcome');
 });
 
-Route::group(['prefix' => 'blog'], function () {
-    Route::resource('posts', PostController::class)->names('blog.posts');
+// Authentication Routes (отдельная группа для маршрутов аутентификации)
+Route::group(['as' => 'auth.'], function () { // Добавляем 'as' => 'auth.' для группировки имен маршрутов аутентификации
+    // Registration Routes
+    Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
+    Route::post('/register', [RegisterController::class, 'register'])->name('register.post'); // Уточняем имя для POST маршрута регистрации
+
+    // Login Routes
+    Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
+    Route::post('/login', [LoginController::class, 'login'])->name('login.post'); // Уточняем имя для POST маршрута входа
+
+    // Password Reset Routes
+    Route::get('/password/reset', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+    Route::post('/password/email', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+    Route::get('/password/reset/{token}', [ResetPasswordController::class, 'showResetForm'])->name('password.reset');
+    Route::post('/password/reset', [ResetPasswordController::class, 'reset'])->name('password.update');
+
+    // Logout Route (теперь будет POST формой, как и должно быть - в другом месте, например в layouts/app.blade.php)
+    // Route::post('/logout', [LogoutController::class, 'logout'])->name('logout'); // Маршрут Logout обычно определяется в Auth::routes(); или вручную в форме POST
+});
+
+
+Route::get('/home', [HomeController::class, 'index'])->name('home'); // Главная страница пользователя (dashboard) - вне группы auth, т.к. может иметь свою логику middleware
+
+
+Route::post('/upload-image', [ImageUploadController::class, 'upload'])->name('image-upload'); // Маршрут для загрузки изображений (вне группы блога, т.к. может быть общим)
+
+Route::group(['prefix' => 'digging_deeper', 'as' => 'digging_deeper.'], function () { // Группа маршрутов для "погружения"
+    Route::get('collections', [DiggingDeeperController::class, 'collections'])->name('collections');
+});
+
+Route::group(['prefix' => 'blog', 'as' => 'blog.'], function () { // Группа маршрутов для блога
+    Route::resource('categories', BlogCategoryController::class)->only(['index', 'show'])->names('categories'); // Ресурсные маршруты для категорий (только index и show)
+    Route::get('/categories/{category:slug}', [BlogCategoryController::class, 'show'])->name('categories.show'); // Повторно определен, можно удалить, если resource route уже покрывает show
+
+    Route::resource('posts', PostController::class)->names('posts'); // Ресурсные маршруты для постов
+    Route::get('/posts/search', [PostController::class, 'search'])->name('posts.search'); // Маршрут для поиска постов
+
+    // Comment Routes (маршруты для комментариев)
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
+
+    // Like Routes (маршруты для лайков)
+    Route::post('/posts/{blogPost}/like', [LikeController::class, 'like'])->name('posts.like');
+    Route::post('/posts/{blogPost}/unlike', [LikeController::class, 'unlike'])->name('posts.unlike');
 });
 
 
 
 
+require __DIR__ . '/admin.php'; // Подключение внешнего файла admin.php - если нужно, оставьте, но проверьте его содержимое
+//Route::resource('rest', RestTestController::class)->names('restTest'); // Закомментированный resource route - возможно устарел или не используется
 
-
-// Маршрут для добавления комментария
-Route::post('/blog/posts{post}', [CommentController::class, 'store'])->name('blog.posts.comments.store');
-Route::get('/search', [PostController::class, 'search'])->name('blog.search');
-
-
-require __DIR__ . '/admin.php';
-//Route::resource('rest', RestTestController::class)->names('restTest');
-
-Route::post('/posts/{post}/like', [LikeController::class, 'like'])->name('blog.posts.like');
-Route::post('/posts/{post}/unlike', [LikeController::class, 'unlike'])->name('blog.posts.unlike');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Auth::routes(); // Маршруты аутентификации Laravel (регистрация, вход, сброс пароля, выход - **уже определены выше, эту строку можно удалить**)

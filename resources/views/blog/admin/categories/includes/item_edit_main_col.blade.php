@@ -46,12 +46,12 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="description">Описание</label>
+                            <label for="description"></label>
 
 
                             <div class="main-container">
                                 <div id="editor">
-                                    <p>Hello from CKEditor 5!</p>
+                                    <p>Описание</p>
                                 </div>
                             </div>
 

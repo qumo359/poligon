@@ -27,14 +27,15 @@
                             <p class="excerpt">
                                 {{$item->excerpt}}
                             </p>
-                            <p>
-                                {{$item->content_html}}
-                            </p>
                             <div class="quote-wrapper">
                                 <div class="quotes">
                                     {{$item->excerpt}}
                                 </div>
                             </div>
+                            <p>
+                                {{$item->content_html}}
+                            </p>
+
 
                         </div>
                     </div>
@@ -48,19 +49,22 @@
                             </div>
                             <ul class="social-icons">
                                 <li>
-                                    @auth @if(Auth::user()->likes()->where('blog_post_id', $item->id)->exists())
-                                        <form action="{{ route('blog.posts.unlike', $item) }}" method="POST">
-                                            @csrf
-                                            @method('DELETE') {{-- Или method="POST", если вы используете POST для unlike --}}
-                                            <button type="submit" class="btn btn-sm btn-danger">Убрать лайк</button>
-                                        </form>
+                                    @auth
+                                        @if(Auth::user()->likes()->where('blog_post_id', $item->id)->exists())
+                                            <form action="{{ route('blog.posts.unlike', $item) }}" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <button type="submit" class="btn btn-sm btn-danger">Убрать лайк</button>
+                                            </form>
+                                        @else
+                                            <form action="{{ route('blog.posts.like', $item) }}" method="POST">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-primary">Лайкнуть</button>
+                                            </form>
+                                        @endif
                                     @else
-                                        <form action="{{ route('blog.posts.like', $item) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm btn-primary">Лайкнуть</button>
-                                        </form>
-                                    @endif
-                                    @else <a href="{{ route('login') }}" class="btn btn-sm btn-outline-secondary">Войдите, чтобы лайкнуть</a>
+                                        <a href="{{ route('login') }}" class="btn btn-sm btn-outline-secondary">Войдите,
+                                            чтобы лайкнуть</a>
                                     @endauth
                                 </li>
                                 <li><a href="https://facebook.com"><i class="fa fa-facebook-f"></i></a></li>
@@ -96,9 +100,9 @@
                                     <div
                                         class="col-lg-6 col-md-6 col-12 nav-left flex-row d-flex justify-content-start align-items-center">
                                         <div class="thumb">
-{{--                                            <a href="">--}}
-{{--                                                <img class="img-fluid" src="/storage/test/imagenotfound.png" alt="">--}}
-{{--                                            </a>--}}
+                                            {{--                                            <a href="">--}}
+                                            {{--                                                <img class="img-fluid" src="/storage/test/imagenotfound.png" alt="">--}}
+                                            {{--                                            </a>--}}
                                         </div>
                                         <div class="detials">
                                             <p>Предыдущий пост</p>
@@ -135,112 +139,61 @@
                         </div>
                     </div>
                     <div class="comments-area">
-                        <h4></h4>
+                        <h4>Комментарии</h4>
                         <div class="comment-list">
                             @foreach($comments as $comment)
-                                <div class="single-comment justify-content-between d-flex">
-                                    <div class="user justify-content-between d-flex">
-                                        <div class="thumb">
-                                            <img src="/storage/test/commentimage.png" alt="">
-                                        </div>
-
-                                        <div class="desc">
-                                            <p class="comment">
-                                                {{$comment->body}}
-                                            </p>
-                                            <div class="d-flex justify-content-between">
-                                                <div class="d-flex align-items-center">
-                                                    <h5>
-                                                        <a href="#">{{$comment->user->name}}</a>
-                                                    </h5>
-                                                    <p class="date">{{ $comment->created_at->diffForHumans() }}</p>
-                                                </div>
-                                                <div class="reply-btn">
-                                                    <a href="#" class="btn-reply text-uppercase">reply</a>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div>
-
+                                @include('partials._comment', ['comment' => $comment]) {{-- Используем частичный шаблон для рекурсивного отображения --}}
                             @endforeach
                         </div>
-                        <div class="comment-list">
-                            <div class="single-comment justify-content-between d-flex">
-                                <div class="user justify-content-between d-flex">
-                                    <div class="thumb">
-                                        <img src="/public/img/comment/comment_2.png" alt="re">
-                                    </div>
-                                    <div class="desc">
-                                        <p class="comment">
-                                            Multiply sea night grass fourth day sea lesser rule open subdue female fill
-                                            which them
-                                            Blessed, give fill lesser bearing multiply sea night grass fourth day sea
-                                            lesser
-                                        </p>
-                                        <div class="d-flex justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <h5>
-                                                    <a href="#">Emilly Blunt</a>
-                                                </h5>
-                                                <p class="date">December 4, 2017 at 3:12 pm </p>
-                                            </div>
-                                            <div class="reply-btn">
-                                                <a href="#" class="btn-reply text-uppercase">reply</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="comment-list">
-                            <div class="single-comment justify-content-between d-flex">
-                                <div class="user justify-content-between d-flex">
-                                    <div class="thumb">
-                                        <img src="/public/img/comment/comment_3.png" alt="">
-                                    </div>
-                                    <div class="desc">
-                                        <p class="comment">
-                                            Multiply sea night grass fourth day sea lesser rule open subdue female fill
-                                            which them
-                                            Blessed, give fill lesser bearing multiply sea night grass fourth day sea
-                                            lesser
-                                        </p>
-                                        <div class="d-flex justify-content-between">
-                                            <div class="d-flex align-items-center">
-                                                <h5>
-                                                    <a href="#">Emilly Blunt</a>
-                                                </h5>
-                                                <p class="date">December 4, 2017 at 3:12 pm </p>
-                                            </div>
-                                            <div class="reply-btn">
-                                                <a href="#" class="btn-reply text-uppercase">reply</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="comment-form">
-                        <h4>Leave a Reply</h4>
-                        <form method="POST" action="{{ route('blog.posts.comments.store', $item)}}">
-                            @csrf
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="form-group">
-                                        <textarea class="form-control w-100" name="comment" id="comment" cols="30"
-                                                  rows="9" placeholder="Write Comment"></textarea>
-                                    </div>
-                                </div>
+                        {{--                        @foreach($comments as $comment)--}}
+                        {{--                            <div class="comment-list">--}}
+                        {{--                                <div class="single-comment justify-content-between d-flex">--}}
+                        {{--                                    <div class="user justify-content-between d-flex">--}}
+                        {{--                                        <div class="thumb">--}}
+                        {{--                                            <img src="/storage/test/commentimage.png" alt="">--}}
+                        {{--                                        </div>--}}
 
-                            </div>
-                            <div class="form-group">
-                                <button type="submit" class="button button-contactForm btn_1 boxed-btn">Send Message
-                                </button>
-                            </div>
-                        </form>
+                        {{--                                        <div class="desc">--}}
+                        {{--                                            <p class="comment">--}}
+                        {{--                                                {{$comment->body}}--}}
+                        {{--                                            </p>--}}
+                        {{--                                            <div class="d-flex justify-content-between">--}}
+                        {{--                                                <div class="d-flex align-items-center">--}}
+                        {{--                                                    <h5>--}}
+                        {{--                                                        <a href="#">{{$comment->user->name}}</a>--}}
+                        {{--                                                    </h5>--}}
+                        {{--                                                    <p class="date">{{ $comment->created_at->diffForHumans() }}</p>--}}
+                        {{--                                                </div>--}}
+                        {{--                                                <div class="reply-btn">--}}
+                        {{--                                                    <a href="#" class="btn-reply text-uppercase">reply</a>--}}
+                        {{--                                                </div>--}}
+                        {{--                                            </div>--}}
+                        {{--                                        </div>--}}
+
+                        {{--                                    </div>--}}
+                        {{--                                </div>--}}
+                        {{--                            </div>--}}
+                        {{--                        @endforeach--}}
+
+
+                        <div class="comment-form">
+                            <h4>Оставить комментарий</h4>
+                            <form method="POST" action="{{ route('blog.posts.comments.store', $item)}}">
+                                @csrf
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group">
+                                        <textarea class="form-control w-100" name="comment" id="comment" cols="30"
+                                                  rows="9" placeholder="Write Comment">Написать комментарий</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="button button-contactForm btn_1 boxed-btn">Отправить
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-4">

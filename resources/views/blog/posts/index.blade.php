@@ -40,11 +40,9 @@
                             </article>
                         @endforeach
 
-
                         <nav class="blog-pagination justify-content-center d-flex">
 
                             {{ $items->links('vendor.pagination.bootstrap-5') }}
-
 
                         </nav>
                     </div>

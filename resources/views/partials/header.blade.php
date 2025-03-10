@@ -15,8 +15,21 @@
                             <nav>
                                 <ul id="navigation">
                                     <li><a class="active" href="{{route('blog.posts.index')}}">Home</a></li>
-                                    <li><a href="{{route('login')}}">Login</a></li>
-                                    <li><a href="{{route('register')}}">Register</a></li>
+
+                                    @if(Auth::user()?->email)
+                                        <li><a href="">{{Auth::user()->email}}</a></li>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                              style="display: none;">
+                                            @csrf
+                                        </form>
+                                        <li><a href="{{ route('logout') }}"
+                                               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                                Выход
+                                            </a></li>
+                                    @else
+                                        <li><a href="{{route('login')}}">Вход</a></li>
+                                        <li><a href="{{route('register')}}">Регистрация</a></li>
+                                    @endif
                                 </ul>
                             </nav>
                         </div>

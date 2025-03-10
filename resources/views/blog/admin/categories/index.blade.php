@@ -3,9 +3,12 @@
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-12">
+
+            <div class="col-md-8">
                 <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
-                    <a class="btn btn-primary" href="{{ route('blog.admin.categories.create') }}">Добавить</a>
+                    <a class="btn btn-primary" href="{{ route('admin.categories.create') }}">Добавить</a>
+                    <a class="btn btn-primary" href="{{ route('admin.posts.index') }}">Посты</a>
+
                 </nav>
                 <div class="card">
                     <div class="card-body">
@@ -19,11 +22,11 @@
                             </thead>
                             <tbody>
                             @foreach($paginator as $item)
-                                @php /** @var \App\Models\BlogCategory $item */ @endphp
+{{--                                @php /** @var \App\Models\BlogCategory $item */ @endphp--}}
                                 <tr>
                                     <td>{{ $item->id }}</td>
                                     <td>
-                                        <a href="{{ route('blog.admin.categories.edit', $item->id) }}">
+                                        <a href="{{ route('admin.categories.edit', $item->id) }}">
                                             {{ $item->title }}
                                         </a>
                                     </td>

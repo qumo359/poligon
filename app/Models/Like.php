@@ -24,4 +24,9 @@ class Like extends Model
     {
         return $this->belongsTo(BlogPost::class, 'blog_post_id'); // Лайк принадлежит посту (уточняем foreign key)
     }
+
+    public function comment(): BelongsTo
+    {
+        return $this->belongsTo(Comment::class); // Лайк принадлежит пользователю
+    }
 }

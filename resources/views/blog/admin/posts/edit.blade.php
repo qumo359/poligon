@@ -18,11 +18,11 @@
         @include('blog.admin.posts.includes.result_messages')
 
         @if($item->exists)
-             <form method="POST" action="{{ route('blog.update', $item->id) }}" enctype="multipart/form-data">
+             <form method="POST" action="{{ route('admin.blog.update', $item->id) }}" enctype="multipart/form-data">
 
                 @method('PATCH')
                 @else
-                    <form method="POST" action="{{ route('blog.admin.posts.store') }}">
+                    <form method="POST" action="{{ route('admin.posts.store') }}">
                         @endif
 
                         @csrf
@@ -38,7 +38,7 @@
 
                     @if($item->exists)
                         <br>
-                        <form method="POST" action="{{ route('blog.admin.posts.destroy', $item->id) }}">
+                        <form method="POST" action="{{ route('admin.posts.destroy', $item->id) }}">
                             @method('DELETE')
                             @csrf
                             <div class="row justify-content-center">

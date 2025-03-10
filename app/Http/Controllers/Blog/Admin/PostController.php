@@ -50,8 +50,10 @@ class PostController extends BaseController
     public function index()
     {
         $paginator = $this->blogPostRepository->getAllWithPaginate();
+        $categories = \App\Models\BlogCategory::withCount('posts')->get();
+        $users = \App\Models\User::all();
 
-        return view('blog.admin.posts.index', compact('paginator'));
+        return view('blog.admin.posts.index', compact('paginator', 'categories', 'users'));
     }
 
     public function storeTest(Request $request)
@@ -157,7 +159,7 @@ class PostController extends BaseController
      * Update the specified resource in storage.
      *
      * @param BlogPostUpdateRequest $request
-     * @param int $id
+     * @param int                   $id
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -193,7 +195,6 @@ class PostController extends BaseController
             $filename = Str::random(20) . '.' . $image->getClientOriginalExtension();
 
 
-
             $imageInstance = Image::make($image);
             $imageInstance->resize(1600, null, function ($constraint) {
                 $constraint->aspectRatio();
@@ -202,16 +203,12 @@ class PostController extends BaseController
             Storage::disk('public')->put('test/' . $filename, $imageInstance->stream());
 
 
-
-
             $imagePreviewInstance = Image::make($image);
             $imagePreviewInstance->resize(800, null, function ($constraint) {
                 $constraint->aspectRatio();
                 $constraint->upsize();
             });
-            $dd =  Storage::disk('public')->put('test/preview/' . $filename, $imagePreviewInstance->stream());
-
-
+            $dd = Storage::disk('public')->put('test/preview/' . $filename, $imagePreviewInstance->stream());
 
 
             $data['post_image'] = $filename;
