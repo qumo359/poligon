@@ -65,12 +65,15 @@ class BlogCategory extends Model
         return $title;
     }
 
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function posts(): HasMany
     {
         // Категория имеет много постов
         return $this->hasMany(BlogPost::class, 'category_id'); // 'category_id' - внешний ключ в таблице blog_posts
     }
-
 
     /**
      * Пример аксессора

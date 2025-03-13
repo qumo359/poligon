@@ -1,4 +1,5 @@
 <div class="single-comment justify-content-between  ">
+
     <div class="user   col-12">
         <div class="thumb">
             <img src="/storage/test/commentimage.png" alt="User Image">
@@ -10,7 +11,7 @@
             <div class="d-flex justify-content-between">
                 <div class="d-flex align-items-center">
                     <h5>
-                        <a href="">{{ $comment->user->name }}</a>
+                        <a href="">{{ $comment?->user?->name }}</a>
                     </h5>
                     <p class="date">{{ $comment->created_at->diffForHumans() }}</p>
                 </div>
@@ -41,6 +42,7 @@
             @include('partials._comment', ['comment' => $reply]) {{-- Рекурсивный вызов для дочерних комментариев --}}
         @endforeach
     </div>
+
 </div>
 
 

@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-
+    @include('blog.admin.admin_sidebar')
     <section class="blog_area section-padding">
         <div class="container">
             <div class="row">

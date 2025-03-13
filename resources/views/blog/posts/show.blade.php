@@ -1,9 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
+
     <section class="blog_area single-post-area section-padding">
         <div class="container">
             <div class="row">
+                @include('blog.admin.admin_sidebar')
                 <div class="col-lg-8 posts-list">
                     <div class="single-post">
                         <div class="feature-img">
@@ -35,8 +37,6 @@
                             <p>
                                 {{$item->content_html}}
                             </p>
-
-
                         </div>
                     </div>
                     <div class="navigation-top">

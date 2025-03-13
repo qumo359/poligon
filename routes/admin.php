@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Blog;
 
 use App\Http\Controllers\Blog\Admin\CategoryController;
+
 // use App\Http\Controllers\Blog\Admin\ImageUploadController;
+use App\Http\Controllers\Blog\Admin\UsersController;
 use App\Http\Controllers\Blog\CommentController;
 use App\Http\Controllers\Blog\PostController;
 use App\Http\Middleware\AdminCheck;
@@ -15,7 +17,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\Blog\BlogCategoryController; // Импортируйте контроллер
+use App\Http\Controllers\Blog\BlogCategoryController;
+
+// Импортируйте контроллер
 
 //>Админка блога
 $groupData = [
@@ -24,9 +28,15 @@ $groupData = [
 ];
 Route::group(['prefix' => 'admin/blog', 'as' => 'admin.', 'middleware' => 'admin'], function () { // Группа маршрутов для админ-панели (с middleware admin)
     Route::resource('categories', \App\Http\Controllers\Blog\Admin\CategoryController::class)->names('categories'); // Ресурсные маршруты для админских категорий
+//    Route::resource('users', \App\Http\Controllers\Blog\Admin\UsersController::class)->names('users');
+    Route::get('/users', [\App\Http\Controllers\Blog\Admin\UsersController::class, 'index'])->name('users.index');
+    Route::put('/blog/posts/{post}', [Admin\PostController::class, 'update'])->name('blog.update');
     Route::resource('posts', \App\Http\Controllers\Blog\Admin\PostController::class)->names('posts'); // Ресурсные маршруты для админских постов
-    Route::post('/blog/posts/{post}', [PostController::class, 'storeTest'])->name('blog.update'); //  Вероятно, лишние маршруты, дублируют resource routes
-    Route::post('/blog/posts2222/{post}', [PostController::class, 'storeTest2'])->name('admins.blog.update'); //  Вероятно, лишние маршруты, дублируют resource routes
+    // Маршруты для редактирования и удаления пользователей
+    Route::get('/users/{user}/edit', [\App\Http\Controllers\Blog\Admin\UsersController::class, 'edit'])->name('users.edit'); // Форма редактирования пользователя
+    Route::put('/users/{user}', [\App\Http\Controllers\Blog\Admin\UsersController::class, 'update'])->name('users.update'); // Обновление данных пользователя (PUT запрос)
+    Route::delete('/users/{user}', [\App\Http\Controllers\Blog\Admin\UsersController::class, 'destroy'])->name('users.destroy'); // Удаление пользователя (DELETE запрос)
+
 });
 
 //Route::group($groupData, function () {

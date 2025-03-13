@@ -100,7 +100,7 @@ class PostController extends BaseController
      */
     public function update(Request $request, string $id)
     {
-        $request->ip();
+       //
     }
 
     /**

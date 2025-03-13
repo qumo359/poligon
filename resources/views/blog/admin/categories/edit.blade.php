@@ -1,6 +1,8 @@
 @extends ('layouts.app')
 
 @section('content')
+    @include('blog.admin.admin_sidebar')
+
     @php /** @var \App\Models\BlogCategory $item */ @endphp
 
     @if($item->exists())

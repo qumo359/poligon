@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+
+
     @php
         /** @var \App\Models\BlogPost $item */
     @endphp
@@ -27,11 +29,20 @@
 
                         @csrf
                         <div class="row justify-content-center">
-                            <div class="col-md-8">
+                            @include('blog.admin.admin_sidebar')
+                            <div class="col-md-6">
                                 @include('blog.admin.posts.includes.post_edit_main_col')
                             </div>
                             <div class="col-md-3">
                                 @include('blog.admin.posts.includes.post_edit_add_col')
+                            </div>
+                        </div>
+                        <div class="row justify-content-center">
+                            <h4>Комментарии</h4>
+                            <div class="comment-list">
+                                @foreach($comments as $comment)
+                                    @include('partials._comment', ['comment' => $comment]) {{-- Используем частичный шаблон для рекурсивного отображения --}}
+                                @endforeach
                             </div>
                         </div>
                     </form>>

@@ -7,6 +7,7 @@ use App\Http\Requests\BlogPostUpdateRequest;
 use App\Jobs\BlogPostAfterCreateJob;
 use App\Jobs\BlogPostAfterDeleteJob;
 use App\Models\BlogPost;
+use App\Models\Comment;
 use App\Repositories\BlogCategoryRepository;
 use App\Repositories\BlogPostRepository;
 use Illuminate\Support\Facades\Storage;
@@ -143,16 +144,16 @@ class PostController extends BaseController
      */
     public function edit($id)
     {
-
         $item = $this->blogPostRepository->getEdit($id);
         if (empty($item)) {
             abort(404);
         }
+        $comments = $item->comments()->whereNull('parent_id')->latest()->get();
 
         $categoryList = $this->blogCategoryRepository->getForComboBox();
 
         return view('blog.admin.posts.edit',
-            compact('item', 'categoryList'));
+            compact('item', 'categoryList', 'comments'));
     }
 
     /**

@@ -64,7 +64,6 @@ class BlogPostObserver
     protected function setHtml(BlogPost $blogPost)
     {
         if ($blogPost->isDirty('content_raw')) {
-            //Todo: markdown->html
             $blogPost->content_html = $blogPost->content_raw;
         }
     }
