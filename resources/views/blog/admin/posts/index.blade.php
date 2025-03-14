@@ -13,7 +13,7 @@
 
                         <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
                             <a class="btn btn-primary" href="{{ route('admin.posts.create') }}">Написать</a>
-                            <a class="btn btn-primary" href="{{ route('admin.categories.index') }}">Категории</a>
+
                             {{--                    <a class="btn btn-primary" href="{{ route('blog.admin.posts.create') }}">Пользователи</a>--}}
                             @if(session('deleted_id'))
                                 <a class="btn btn-danger"

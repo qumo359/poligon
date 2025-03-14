@@ -5,7 +5,7 @@
     <section class="blog_area single-post-area section-padding">
         <div class="container">
             <div class="row">
-                @include('blog.admin.admin_sidebar')
+
                 <div class="col-lg-8 posts-list">
                     <div class="single-post">
                         <div class="feature-img">

@@ -1,6 +1,6 @@
 <div class="blog_right_sidebar">
     <aside class="single_sidebar_widget search_widget">
-        <form action="{{ route('blog.posts.search') }}">
+        <form action="{{ route('blog.post.search') }}" method="GET">
             <div class="form-group">
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="Поиск..." name="query"

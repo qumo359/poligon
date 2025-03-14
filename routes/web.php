@@ -68,7 +68,8 @@ Route::group(['prefix' => 'blog', 'as' => 'blog.'], function () { // Групп�
     Route::get('/categories/{category:slug}', [BlogCategoryController::class, 'show'])->name('categories.show'); // Повторно определен, можно удалить, если resource route уже покрывает show
 
     Route::resource('posts', PostController::class)->names('posts'); // Ресурсные маршруты для постов
-    Route::get('/posts/search', [PostController::class, 'search'])->name('posts.search'); // Маршрут для поиска постов
+
+    Route::get('/post/search/', [PostController::class, 'search'])->name('post.search'); // Маршрут для поиска постов
 
     // Comment Routes (маршруты для комментариев)
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');

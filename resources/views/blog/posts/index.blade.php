@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('blog.admin.admin_sidebar')
+
     <section class="blog_area section-padding">
         <div class="container">
             <div class="row">
@@ -33,7 +33,7 @@
                                     <p>{{ $item->excerpt }}</p>
                                     <ul class="blog-info-link">
                                         <li><a href="#"><i class="fa fa-user"></i> Admin</a></li>
-                                        <li><a href="#"><i class="fa fa-comments"></i> {{ $item->comments()->count() }}
+                                        <li><a ><i class="fa fa-comments"></i> {{ $item->comments()->count() }}
                                                 Comments</a></li>
                                     </ul>
                                 </div>

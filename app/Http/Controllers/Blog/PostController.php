@@ -33,6 +33,7 @@ class PostController extends BaseController
 
     public function search(Request $request)
     {
+
         $query = $request->input('query');
 
         if (!$query) {
@@ -72,6 +73,7 @@ class PostController extends BaseController
      */
     public function show(string $id)
     {
+
         $item = BlogPost::find($id);
         $categories = BlogCategory::withCount('posts')->get();
         $latestPosts = BlogPost::latest('created_at')->take(5)->get();

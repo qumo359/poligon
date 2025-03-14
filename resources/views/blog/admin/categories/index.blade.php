@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
-    @include('blog.admin.admin_sidebar')
+
 
     <div class="container">
         <div class="row justify-content-center">
-
+            @include('blog.admin.admin_sidebar')
             <div class="col-lg-9">
                 <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
                     <a class="btn btn-primary" href="{{ route('admin.categories.create') }}">Добавить</a>
-                    <a class="btn btn-primary" href="{{ route('admin.posts.index') }}">Посты</a>
+
 
                 </nav>
                 <div class="card">

@@ -39,10 +39,12 @@
                         </div>
                         <div class="row justify-content-center">
                             <h4>Комментарии</h4>
-                            <div class="comment-list">
+                            <div class="comment-list"
+                                 @if(@$comments)
                                 @foreach($comments as $comment)
                                     @include('partials._comment', ['comment' => $comment]) {{-- Используем частичный шаблон для рекурсивного отображения --}}
                                 @endforeach
+                                 @endif
                             </div>
                         </div>
                     </form>>
